@@ -1,0 +1,22 @@
+#include<stdio.h>
+4 #include <sys/types.h>
+5 #include <fcntl.h>
+6 #include <unistd.h>
+7
+8 int main(void) {
+9 int fd;
+10 if((fd = open("close-on-exec.txt", O_WRONLY|O_CREAT, 0666)) == -1) {
+11 printf("Unable to open the file.");
+12 return -1;
+13 }
+14
+15 int old_flags = fcntl(fd, F_GETFD);
+16 printf("Old flags: %d\n", old_flags);
+17
+18 fcntl(fd, F_SETFD, FD_CLOEXEC);
+19
+20 int new_flags = fcntl(fd, F_GETFD);
+21 printf("New flags: %d\n", new_flags);
+22
+23 return 0;
+24 }
